@@ -1,14 +1,14 @@
 package hello.controller
 
 import hello.domain.Person
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
 
-@RestController
-class HelloController {
+@Controller
+class IndexController {
 
-    @RequestMapping("/home")
-    String home() {
+    @RequestMapping(["/", "/index"])
+    String index() {
         def p = Person.findByFirstName("Homer")
         if (!p) {
             Person.withTransaction {
@@ -21,6 +21,6 @@ class HelloController {
                 p.save(flush: true, failOnError: true)
             }
         }
-        return "Hello ${p.firstName}! You stared here ${p.counter} times."
+        return "Hello ${p.firstName} ${p.lastName}! You have been here ${p.counter} times."
     }
 }

@@ -1,4 +1,4 @@
-package hello.controller
+package hello.controller.api
 
 import hello.domain.Person
 import org.springframework.http.HttpStatus
@@ -10,15 +10,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET
 import static org.springframework.web.bind.annotation.RequestMethod.POST
 
 @RestController
-class GreetingController {
+class PersonApiController {
 
-    @RequestMapping(value = "/person/greet", method = GET)
+    @RequestMapping(value = "/api/person/greet", method = GET)
     String greet(String firstName) {
         def p = Person.findByFirstName(firstName)
         return p ? "Hello ${p.firstName}!" : "Person not found"
     }
 
-    @RequestMapping(value = '/person/add', method = POST)
+    @RequestMapping(value = '/api/person/add', method = POST)
     ResponseEntity addPerson(String firstName, String lastName) {
         Person.withTransaction {
             def p = new Person(firstName: firstName, lastName: lastName).save()

@@ -1,4 +1,4 @@
-package hello.controller
+package hello.controller.mvc
 
 import hello.domain.Person
 import hello.service.PeopleService
@@ -14,25 +14,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import javax.validation.Valid
 
 @Controller
-public class WebController extends WebMvcConfigurerAdapter {
+public class PersonController extends WebMvcConfigurerAdapter {
 
     @Autowired
     PeopleService peopleService
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/results").setViewName("results")
+        registry.addViewController("/congratulations").setViewName("person/congratulations")
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String showForm(Person person) {
-        return "form"
+    @RequestMapping(value = "/person/add", method = RequestMethod.GET)
+    public String add(Person person) {
+        return "person/form"
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ModelAndView checkPersonInfo(@Valid Person person, BindingResult bindingResult) {
+    @RequestMapping(value = "/person/add.do", method = RequestMethod.POST)
+    public ModelAndView doAdd(@Valid Person person, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("form", bindingResult.getModel() + [error: true])
+            return new ModelAndView("person/form", bindingResult.getModel() + [error: true])
         }
         Person.withTransaction {
             person.save(flush: true, failOnError: true)
@@ -40,11 +40,11 @@ public class WebController extends WebMvcConfigurerAdapter {
         return new ModelAndView("redirect:/results")
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ModelAndView listPeople() {
+    @RequestMapping(value = "/person/list", method = RequestMethod.GET)
+    public ModelAndView list() {
         def list = peopleService.findPeople()
         def ages = list.collectEntries { [it.id, peopleService.getBirthdayYear(it)] }
-        return new ModelAndView("list", [list: list, ages: ages])
+        return new ModelAndView("person/list", [list: list, ages: ages])
     }
 
 }
