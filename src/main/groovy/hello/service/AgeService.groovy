@@ -1,4 +1,4 @@
-package hello
+package hello.service
 
 import groovy.time.TimeCategory
 import groovy.util.logging.Log4j

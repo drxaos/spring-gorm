@@ -1,6 +1,7 @@
-package hello
+package hello.service
 
 import groovy.util.logging.Log4j
+import hello.domain.Person
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -10,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 public class PeopleService {
 
     @Autowired
-    def ageService;
+    AgeService ageService
 
     @Transactional
     public List findPeople() {

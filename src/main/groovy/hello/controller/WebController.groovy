@@ -1,5 +1,7 @@
-package hello
+package hello.controller
 
+import hello.domain.Person
+import hello.service.PeopleService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.validation.BindingResult
@@ -15,7 +17,7 @@ import javax.validation.Valid
 public class WebController extends WebMvcConfigurerAdapter {
 
     @Autowired
-    def peopleService
+    PeopleService peopleService
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -41,7 +43,8 @@ public class WebController extends WebMvcConfigurerAdapter {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView listPeople() {
         def list = peopleService.findPeople()
-        return new ModelAndView("list", [list: list])
+        def ages = list.collectEntries { [it.id, peopleService.getBirthdayYear(it)] }
+        return new ModelAndView("list", [list: list, ages: ages])
     }
 
 }
